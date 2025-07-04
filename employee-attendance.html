@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Attendance — Maisha Dhabiti</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #f7971e);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+form input, form button {
+  flex: 1 1 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+form button {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background: #218838;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  text-align: left;
+}
+
+th {
+  background: #007bff;
+  color: #fff;
+}
+
+.checkout-btn {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.checkout-btn:hover {
+  background: #c82333;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 15px auto;
+  width: 100px;
+  height: auto;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="login-container">
+  <img src="https://via.placeholder.com/150x50?text=Maisha+Dhabiti+Logo" alt="Maisha Dhabiti Logo" class="logo">
+  <h2>Admin Login</h2>
+  <form id="login-form">
+    <input type="text" id="admin-username" placeholder="Username" required>
+    <input type="password" id="admin-password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+</div>
+
+<div class="container" id="attendance-container" style="display:none;">
+  <img src="https://via.placeholder.com/150x50?text=Maisha+Dhabiti+Logo" alt="Maisha Dhabiti Logo" class="logo">
+  <h2>Employee Attendance</h2>
+  <form id="attendance-form">
+    <input type="text" id="employee-name" placeholder="Enter employee name" required>
+    <input type="text" id="employee-position" placeholder="Enter position" required>
+    <button type="submit">Check In</button>
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Check In</th>
+        <th>Check Out</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="attendance-list">
+      <!-- Records appear here -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+const loginForm = document.getElementById('login-form');
+const loginContainer = document.getElementById('login-container');
+const attendanceContainer = document.getElementById('attendance-container');
+
+const adminUsername = "maishadhabiti";
+const adminPassword = "MDF123"; // change to a secure password in production
+
+loginForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const username = document.getElementById('admin-username').value.trim();
+  const password = document.getElementById('admin-password').value.trim();
+
+  if (username === adminUsername && password === adminPassword) {
+    loginContainer.style.display = 'none';
+    attendanceContainer.style.display = 'block';
+  } else {
+    alert("Invalid login details");
+  }
+});
+
+const attendanceForm = document.getElementById('attendance-form');
+const nameInput = document.getElementById('employee-name');
+const positionInput = document.getElementById('employee-position');
+const list = document.getElementById('attendance-list');
+
+attendanceForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const name = nameInput.value.trim();
+  const position = positionInput.value.trim();
+  if (!name || !position) return;
+
+  const now = new Date();
+  const checkInTime = now.toLocaleTimeString();
+
+  const row = document.createElement('tr');
+
+  const cell1 = document.createElement('td');
+  cell1.textContent = list.children.length + 1;
+
+  const cell2 = document.createElement('td');
+  cell2.textContent = name;
+
+  const cell3 = document.createElement('td');
+  cell3.textContent = position;
+
+  const cell4 = document.createElement('td');
+  cell4.textContent = checkInTime;
+
+  const cell5 = document.createElement('td');
+  cell5.textContent = "-";
+
+  const cell6 = document.createElement('td');
+  const checkoutBtn = document.createElement('button');
+  checkoutBtn.textContent = "Check Out";
+  checkoutBtn.classList.add('checkout-btn');
+
+  checkoutBtn.addEventListener('click', function() {
+    const nowOut = new Date();
+    cell5.textContent = nowOut.toLocaleTimeString();
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = "Done";
+  });
+
+  cell6.appendChild(checkoutBtn);
+
+  row.appendChild(cell1);
+  row.appendChild(cell2);
+  row.appendChild(cell3);
+  row.appendChild(cell4);
+  row.appendChild(cell5);
+  row.appendChild(cell6);
+
+  list.appendChild(row);
+
+  nameInput.value = '';
+  positionInput.value = '';
+});
+</script>
+</body>
+</html>
